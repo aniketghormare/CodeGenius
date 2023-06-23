@@ -1,5 +1,5 @@
 import React from 'react'
-import backimg from "../components/images/pixelimg.jpg"
+import backimg from "../images/pixelimg.jpg"
 const Login = () => {
     return (
         <div className='grid grid-cols-1 sm:grid-cols-2 h-screen w-full'>
