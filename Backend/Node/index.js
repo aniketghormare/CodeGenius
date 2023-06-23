@@ -1,8 +1,12 @@
 const express=require("express")
 const app=express();
 const { Configuration, OpenAIApi } = require("openai");
+const { userRouter } = require("./routes/user.route");
+const { connect } = require("mongoose");
 require("dotenv").config();
 app.use(express.json());
+
+// app.use("/users", userRouter)
 
 const configuration = new Configuration({
     organization: "org-hn3hvCjSs5mgorBC2bNiEiDE",
@@ -43,6 +47,13 @@ app.post("/chat",(req,res)=>{
     })
 })
 
-app.listen(4100,()=>{
+app.listen(4100,async()=>{
+  try {
+    await connect
+    console.log("DB is connected")
     console.log("server is listening")
+  } catch (error) {
+    console.log(err.message)
+  }
+    
 })
