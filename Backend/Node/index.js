@@ -1,10 +1,19 @@
 const express=require("express")
 const app=express();
+const {User}=require("./routes/userRoute");
+const {connection}=require("./config/db")
 const { Configuration, OpenAIApi } = require("openai");
-const { userRouter } = require("./routes/user.route");
-const { connect } = require("mongoose");
+
+// const {client}=require("./config/redis")
+const cookie=require("cookie-parser");
+
 require("dotenv").config();
 app.use(express.json());
+app.use(cookie())
+app.use("/",User);
+
+
+
 
 // app.use("/users", userRouter)
 
@@ -48,6 +57,14 @@ app.post("/chat",(req,res)=>{
 })
 
 app.listen(4100,async()=>{
+
+    try {
+      await connection;
+      console.log("server is listening");
+    } catch (error) {
+      res.send(error.message);
+    }
+
   try {
     await connect
     console.log("DB is connected")
@@ -55,5 +72,5 @@ app.listen(4100,async()=>{
   } catch (error) {
     console.log(err.message)
   }
-    
+
 })
