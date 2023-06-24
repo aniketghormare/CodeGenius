@@ -1,8 +1,17 @@
 const express=require("express")
 const app=express();
+const {User}=require("./routes/userRoute");
+const {connection}=require("./config/db")
 const { Configuration, OpenAIApi } = require("openai");
+// const {client}=require("./config/redis")
+const cookie=require("cookie-parser");
 require("dotenv").config();
 app.use(express.json());
+app.use(cookie())
+app.use("/",User);
+
+
+
 
 const configuration = new Configuration({
     organization: "org-hn3hvCjSs5mgorBC2bNiEiDE",
@@ -43,6 +52,11 @@ app.post("/chat",(req,res)=>{
     })
 })
 
-app.listen(4100,()=>{
-    console.log("server is listening")
+app.listen(4100,async()=>{
+    try {
+      await connection;
+      console.log("server is listening");
+    } catch (error) {
+      res.send(error.message);
+    }
 })
