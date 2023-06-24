@@ -18,7 +18,7 @@ app.use("/",User);
 // app.use("/users", userRouter)
 
 const configuration = new Configuration({
-    organization: "org-hn3hvCjSs5mgorBC2bNiEiDE",
+    // organization: "org-hn3hvCjSs5mgorBC2bNiEiDE",
     apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
@@ -60,17 +60,11 @@ app.listen(4100,async()=>{
 
     try {
       await connection;
-      console.log("server is listening");
+      console.log("connection successfully");
     } catch (error) {
       res.send(error.message);
     }
+    console.log("server is running on port 4100")
 
-  try {
-    await connect
-    console.log("DB is connected")
-    console.log("server is listening")
-  } catch (error) {
-    console.log(err.message)
-  }
-
+  
 })
