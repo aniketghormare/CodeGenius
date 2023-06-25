@@ -3,7 +3,7 @@ const app=express();
 const {User}=require("./routes/userRoute");
 const {connection}=require("./config/db")
 const { Configuration, OpenAIApi } = require("openai");
-
+const cors=require("cors")
 // const {client}=require("./config/redis")
 const cookie=require("cookie-parser");
 
@@ -11,14 +11,15 @@ require("dotenv").config();
 app.use(express.json());
 app.use(cookie())
 app.use("/",User);
+app.use(cors())
 
 
 
 
-// app.use("/users", userRouter)
+ app.use("/users", User)
 
 const configuration = new Configuration({
-    organization: "org-hn3hvCjSs5mgorBC2bNiEiDE",
+    // organization: "org-hn3hvCjSs5mgorBC2bNiEiDE",
     apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
@@ -58,19 +59,14 @@ app.post("/chat",(req,res)=>{
 
 app.listen(4100,async()=>{
 
-    try {
-      await connection;
-      console.log("server is listening");
-    } catch (error) {
-      res.send(error.message);
-    }
+   
 
   try {
-    await connect
+    await connection
     console.log("DB is connected")
     console.log("server is listening")
   } catch (error) {
-    console.log(err.message)
+    console.log(error)
   }
 
 })

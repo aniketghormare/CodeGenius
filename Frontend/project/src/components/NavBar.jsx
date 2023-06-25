@@ -16,6 +16,7 @@ const NavBar = () => {
      <div id='menu'>
      <Link  to={'/login'}>Login</Link>
      <Link  to={'/register'}>Signup</Link>
+     <Link  to={'/interview'}>Interview</Link>
      </div>
     </DIV>
   )

@@ -87,11 +87,12 @@
 // }
 
 const express = require("express");
+//import express from "express"
 const { UserModel } = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-
+let fetch=require('node-fetch');
 const User = express.Router();
 
 User.get("/data", async (req, res) => {
@@ -131,17 +132,17 @@ User.post("/login", async (req, res) => {
           process.env.normalToken,
           { expiresIn: 60 }
         );
-        let refreshToken = jwt.sign(
-          { userID: isPresent._id },
-          process.env.refreshToken,
-          { expiresIn: 240 }
-        );
+        // let refreshToken = jwt.sign(
+        //   { userID: isPresent._id },
+        //   process.env.refreshToken,
+        //   { expiresIn: 240 }
+        // );
 
-        res.cookie(normalToken, normalToken);
-        res.cookie(refreshToken, refreshToken);
-        res.send("login successful");
+        // res.cookie(normalToken, normalToken);
+        // res.cookie(refreshToken, refreshToken);
+        res.send({res:"login successful","token":normalToken});
       } else {
-        res.end(err.message);
+        res.send(err);
       }
     });
   } catch (error) {
@@ -149,26 +150,32 @@ User.post("/login", async (req, res) => {
   }
 });
 
-User.post("/self", async () => {
+User.get("/self", async () => {
     let data = await UserModel.findOne();
     let question = `Give me 5 intro question based on the data given. This data is about a candidate based on his knowledge give questions. Education:${data.education},About:${data.about}.Give medium-level questions for the candidate.`;
   
-    import('node-fetch')
-      .then((module) => module.default('http://localhost:4100/chat', {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(question)
-      }))
-      .then(res => {
-        console.log('Response status:', res.status);
-        return res.json();
-      })
-      .then((data) => {
-        console.log('Response JSON:', data);
-      })
-      .catch(err => console.log('Fetch error:', err));
+    // import('node-fetch')
+    //   .then((module) => module.default('http://localhost:4100/chat', {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json"
+    //     },
+    //     body: JSON.stringify(question)
+    //   }))
+    //   .then(res => {
+    //     console.log('Response status:', res.status);
+    //     return res.json();
+    //   })
+    //   .then((data) => {
+    //     console.log('Response JSON:', data);
+    //   })
+    //   .catch(err => console.log('Fetch error:', err));
+    fetch('http://localhost:4100/chat', {
+      method: 'POST',
+      body: JSON.stringify({question}),
+      headers: { 'Content-Type': 'application/json' }
+  }).then(res => res.json())
+    .then(json => console.log(json));
   });
 
 User.delete("/delete/:id", async (req, res) => {
